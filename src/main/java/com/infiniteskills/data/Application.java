@@ -30,6 +30,13 @@ public class Application {
 		
 		session.save(user);
 		session.getTransaction().commit();
+		
+		session.beginTransaction();
+		User dbUser = (User)session.get(User.class, user.getUserId());
+		dbUser.setFirstName("Joe");
+		session.update(dbUser);
+		session.getTransaction().commit();
+		
 		session.close();
 
 	}

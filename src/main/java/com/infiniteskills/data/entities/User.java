@@ -24,7 +24,7 @@ public class User {
 	@Column(name="LAST_NAME")
 	private String lastName;
 	
-	@Column(name="BIRTH_DATE")
+	@Column(name="BIRTH_DATE", nullable=false)
 	private Date birthDate;
 	
 	@Column(name="EMAIL_ADDRESS")
@@ -36,10 +36,10 @@ public class User {
 	@Column(name="LAST_UPDATED_BY")
 	private String lastUpdatedBy;
 	
-	@Column(name="CREATED_DATE")
+	@Column(name="CREATED_DATE", updatable=false)
 	private Date createdDate;
 	
-	@Column(name="CREATED_BY")
+	@Column(name="CREATED_BY", updatable=false)
 	private String createdBy;
 
 	public Long getUserId() {
