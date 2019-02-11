@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.hibernate.Session;
 
+import com.infiniteskills.data.entities.TimeTest;
 import com.infiniteskills.data.entities.User;
 
 /**
@@ -15,29 +16,24 @@ public class Application {
 	
 	public static void main(String[] args) {
 		Session session = HibernateUtil.getSessionfactory().openSession();
-		session.getTransaction().begin();
-		
-		User user = new User();
-		Date date = new Date();
-		user.setBirthDate(date);
-		user.setCreatedDate(date);
-		user.setCreatedBy("Brais");
-		user.setEmailAddress("brais@email.com");
-		user.setFirstName("Brais");
-		user.setLastName("Cidras");
-		user.setLastUpdatedBy("Brais");
-		user.setLastUpdatedDate(date);
-		
-		session.save(user);
-		session.getTransaction().commit();
-		
-		session.beginTransaction();
-		User dbUser = (User)session.get(User.class, user.getUserId());
-		dbUser.setFirstName("Joe");
-		session.update(dbUser);
-		session.getTransaction().commit();
-		
-		session.close();
-
+		try {
+			session.getTransaction().begin();
+			
+			TimeTest test = new TimeTest(new Date());
+			session.save(test);
+			session.getTransaction().commit();
+			
+			// For getting the timeTest ID
+			session.refresh(test);
+			
+			System.out.println(test.toString());
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+			HibernateUtil.getSessionfactory().close();
+		}
 	}
 }
