@@ -1,8 +1,8 @@
 package com.infiniteskills.data.entities;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -52,8 +53,9 @@ public class Bank {
 	
 	@ElementCollection
 	@CollectionTable(name="BANK_CONTACT", joinColumns=@JoinColumn(name="BANK_ID"))
+	@MapKeyColumn(name="POSITION_TYPE")
 	@Column(name="NAME")
-	private List<String> contacts = new ArrayList<String>();
+	private Map<String, String> contacts = new HashMap<String, String>();
 
 	public Long getBankId() {
 		return bankId;
@@ -151,11 +153,11 @@ public class Bank {
 		this.createdBy = createdBy;
 	}
 
-	public List<String> getContacts() {
+	public Map<String, String> getContacts() {
 		return contacts;
 	}
 
-	public void setContacts(List<String> contacts) {
+	public void setContacts(Map<String, String> contacts) {
 		this.contacts = contacts;
 	}
 }
