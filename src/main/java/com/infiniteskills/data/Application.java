@@ -22,43 +22,46 @@ public class Application {
 		try {
 			session.getTransaction().begin();
 			
-//			Bank bank = new Bank();
-//			bank.setName("Federal Trust");
-//			bank.setAddressLine1("33 Wall Street");
-//			bank.setAddressLine2("Suite 233");
-//			bank.setCity("New York");
-//			bank.setState("NY");
-//			bank.setZipCode("12345");
-//			bank.setInternational(false);
-//			bank.setCreatedBy("Kevin");
-//			bank.setCreatedDate(new Date());
-//			bank.setLastUpdatedBy("Kevin");
-//			bank.setLastUpdatedDate(new Date());
-//			session.save(bank);
-//			
-//			session.getTransaction().commit();
+			Bank bank = new Bank();
+			bank.setName("Federal Trust");
+			bank.setAddressLine1("33 Wall Street");
+			bank.setAddressLine2("Suite 233");
+			bank.setCity("New York");
+			bank.setState("NY");
+			bank.setZipCode("12345");
+			bank.setInternational(false);
+			bank.setCreatedBy("Kevin");
+			bank.setCreatedDate(new Date());
+			bank.setLastUpdatedBy("Kevin");
+			bank.setLastUpdatedDate(new Date());
+			bank.getContacts().add("Joe");
+			bank.getContacts().add("Mary");
 			
-			Date date = new Date();
-			User user = new User();
-			user.setBirthDate(getMyBirthday());
-			user.setCreatedBy("Brais");
-			user.setCreatedDate(date);
-			user.setEmailAddress("brais@email.com");
-			user.setFirstName("Brais");
-			user.setLastName("Cidras");
-			user.setLastUpdatedBy("Brais");
-			user.setLastUpdatedDate(date);
+			session.save(bank);
 			
-			Address address = new Address();
-			address.setAddressLine1("Blood");
-			address.setAddressLine2("Rage");
-			address.setCity("Madrid");
-			address.setState("28");
-			address.setZipCode("28000");
-			user.setAddress(address);
-			
-			session.save(user);
 			session.getTransaction().commit();
+			
+//			Date date = new Date();
+//			User user = new User();
+//			user.setBirthDate(getMyBirthday());
+//			user.setCreatedBy("Brais");
+//			user.setCreatedDate(date);
+//			user.setEmailAddress("brais@email.com");
+//			user.setFirstName("Brais");
+//			user.setLastName("Cidras");
+//			user.setLastUpdatedBy("Brais");
+//			user.setLastUpdatedDate(date);
+//			
+//			Address address = new Address();
+//			address.setAddressLine1("Blood");
+//			address.setAddressLine2("Rage");
+//			address.setCity("Madrid");
+//			address.setState("28");
+//			address.setZipCode("28000");
+//			user.setAddress(address);
+//			
+//			session.save(user);
+//			session.getTransaction().commit();
 //			
 //			session.refresh(user);
 //			
