@@ -2,28 +2,57 @@ package com.infiniteskills.data.entities;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Table(name = "BANK")
 public class Bank {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "BANK_ID")
 	private Long bankId;
 
+	@Column(name = "NAME")
 	private String name;
 
+	@Column(name = "ADDRESS_LINE1")
 	private String addressLine1;
 
+	@Column(name = "ADDRESS_LINE2")
 	private String addressLine2;
 
+	@Column(name = "CITY")
 	private String city;
 
+	@Column(name = "STATE")
 	private String state;
 
+	@Column(name = "ZIP_CODE")
 	private String zipCode;
+	
+	@Column(name = "IS_INTERNATIONAL")
+	private boolean international;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "LAST_UPDATED_DATE")
 	private Date lastUpdatedDate;
 
+	@Column(name = "LAST_UPDATED_BY")
 	private String lastUpdatedBy;
-
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "CREATED_DATE")
 	private Date createdDate;
 
+	@Column(name = "CREATED_BY")
 	private String createdBy;
 
 	public Long getBankId() {
@@ -80,6 +109,14 @@ public class Bank {
 
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
+	}
+
+	public boolean isInternational() {
+		return international;
+	}
+
+	public void setInternational(boolean international) {
+		this.international = international;
 	}
 
 	public Date getLastUpdatedDate() {
