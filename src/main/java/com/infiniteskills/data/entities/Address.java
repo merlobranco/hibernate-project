@@ -7,19 +7,19 @@ import javax.persistence.Embeddable;
 public class Address {
 	
 	@Column(name = "ADDRESS_LINE_1")
-	public String addressLine1;
+	private String addressLine1;
 	
 	@Column(name = "ADDRESS_LINE_2")
-	public String addressLine2;
+	private String addressLine2;
 	
 	@Column(name = "CITY")
-	public String city;
+	private String city;
 	
 	@Column(name = "STATE")
-	public String state;
+	private String state;
 	
 	@Column(name = "ZIP_CODE")
-	public String zipCode;
+	private String zipCode;
 
 	public String getAddressLine1() {
 		return addressLine1;

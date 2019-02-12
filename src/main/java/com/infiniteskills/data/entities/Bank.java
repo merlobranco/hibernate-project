@@ -62,43 +62,43 @@ public class Bank {
 	}
 
 	public String getAddressLine1() {
-		return address.addressLine1;
+		return address.getAddressLine1();
 	}
 
 	public void setAddressLine1(String addressLine1) {
-		this.address.addressLine1 = addressLine1;
+		this.address.setAddressLine1(addressLine1);
 	}
 
 	public String getAddressLine2() {
-		return address.addressLine2;
+		return address.getAddressLine2();
 	}
 
 	public void setAddressLine2(String addressLine2) {
-		this.address.addressLine2 = addressLine2;
+		this.address.setAddressLine2(addressLine2);
 	}
 
 	public String getCity() {
-		return address.city;
+		return address.getCity();
 	}
 
 	public void setCity(String city) {
-		this.address.city = city;
+		this.address.setCity(city);
 	}
 
 	public String getState() {
-		return address.state;
+		return address.getState();
 	}
 
 	public void setState(String state) {
-		this.address.state = state;
+		this.address.setState(state);
 	}
 
 	public String getZipCode() {
-		return address.zipCode;
+		return address.getZipCode();
 	}
 
 	public void setZipCode(String zipCode) {
-		this.address.zipCode = zipCode;
+		this.address.setZipCode(zipCode);
 	}
 
 	public boolean isInternational() {
