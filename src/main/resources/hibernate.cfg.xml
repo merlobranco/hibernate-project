@@ -22,7 +22,8 @@
 
         <mapping class="com.infiniteskills.data.entities.User"/>
         <mapping class="com.infiniteskills.data.entities.TimeTest"/>
-
+		<mapping class="com.infiniteskills.data.entities.Bank"/>
+		
     </session-factory>
 
 </hibernate-configuration>

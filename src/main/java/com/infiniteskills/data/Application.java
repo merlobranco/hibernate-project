@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.hibernate.Session;
 
+import com.infiniteskills.data.entities.Bank;
 import com.infiniteskills.data.entities.TimeTest;
 import com.infiniteskills.data.entities.User;
 
@@ -20,23 +21,39 @@ public class Application {
 		try {
 			session.getTransaction().begin();
 			
-			Date date = new Date();
-			User user = new User();
-			user.setBirthDate(getMyBirthday());
-			user.setCreatedBy("Brais");
-			user.setCreatedDate(date);
-			user.setEmailAddress("brais@email.com");
-			user.setFirstName("Kevin");
-			user.setLastName("Cidras");
-			user.setLastUpdatedBy("Brais");
-			user.setLastUpdatedDate(date);
+			Bank bank = new Bank();
+			bank.setName("Federal Trust");
+			bank.setAddressLine1("33 Wall Street");
+			bank.setAddressLine2("Suite 233");
+			bank.setCity("New York");
+			bank.setState("NY");
+			bank.setZipCode("12345");
+			bank.setInternational(false);
+			bank.setCreatedBy("Kevin");
+			bank.setCreatedDate(new Date());
+			bank.setLastUpdatedBy("Kevin");
+			bank.setLastUpdatedDate(new Date());
+			session.save(bank);
 			
-			session.save(user);
 			session.getTransaction().commit();
 			
-			session.refresh(user);
-			
-			System.out.println(user.getAge());
+//			Date date = new Date();
+//			User user = new User();
+//			user.setBirthDate(getMyBirthday());
+//			user.setCreatedBy("Brais");
+//			user.setCreatedDate(date);
+//			user.setEmailAddress("brais@email.com");
+//			user.setFirstName("Kevin");
+//			user.setLastName("Cidras");
+//			user.setLastUpdatedBy("Brais");
+//			user.setLastUpdatedDate(date);
+//			
+//			session.save(user);
+//			session.getTransaction().commit();
+//			
+//			session.refresh(user);
+//			
+//			System.out.println(user.getAge());
 			
 //			TimeTest test = new TimeTest(new Date());
 //			session.save(test);
