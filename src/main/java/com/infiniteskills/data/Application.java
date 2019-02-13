@@ -9,6 +9,7 @@ import org.hibernate.Session;
 
 import com.infiniteskills.data.entities.Address;
 import com.infiniteskills.data.entities.Bank;
+import com.infiniteskills.data.entities.Credential;
 import com.infiniteskills.data.entities.TimeTest;
 import com.infiniteskills.data.entities.User;
 
@@ -54,26 +55,31 @@ public class Application {
 			user.setLastUpdatedBy("Brais");
 			user.setLastUpdatedDate(date);
 			
-			List<Address> addresses = new ArrayList<Address>(); 
-			Address address = new Address();
-			address.setAddressLine1("Blood");
-			address.setAddressLine2("Rage");
-			address.setCity("Madrid");
-			address.setState("MA");
-			address.setZipCode("28000");
-			addresses.add(address);
+//			List<Address> addresses = new ArrayList<Address>(); 
+//			Address address = new Address();
+//			address.setAddressLine1("Blood");
+//			address.setAddressLine2("Rage");
+//			address.setCity("Madrid");
+//			address.setState("MA");
+//			address.setZipCode("28000");
+//			addresses.add(address);
+//			
+//			Address address2 = new Address();
+//			address2.setAddressLine1("Game");
+//			address2.setAddressLine2("Thrones");
+//			address2.setCity("Cape Town");
+//			address2.setState("CT");
+//			address2.setZipCode("7925");
+//			addresses.add(address2);
+//			
+//			user.setAddress(addresses);
 			
-			Address address2 = new Address();
-			address2.setAddressLine1("Game");
-			address2.setAddressLine2("Thrones");
-			address2.setCity("Cape Town");
-			address2.setState("CT");
-			address2.setZipCode("7925");
-			addresses.add(address2);
+			Credential credential = new Credential();
+			credential.setPassword("ASIOAF@");
+			credential.setUsername("ASIOAF");
+			credential.setUser(user);
 			
-			user.setAddress(addresses);
-			
-			session.save(user);
+			session.save(credential);
 			session.getTransaction().commit();
 //			
 //			session.refresh(user);
