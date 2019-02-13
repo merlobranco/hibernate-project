@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -28,6 +29,9 @@ public class User {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="USER_ID")
 	private Long userId;
+	
+	@OneToOne(mappedBy="user")
+	private Credential credential;
 	
 	@Column(name="FIRST_NAME")
 	private String firstName;
@@ -71,6 +75,14 @@ public class User {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public Credential getCredential() {
+		return credential;
+	}
+
+	public void setCredential(Credential credential) {
+		this.credential = credential;
 	}
 
 	public String getFirstName() {

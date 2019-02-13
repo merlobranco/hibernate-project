@@ -49,9 +49,9 @@ public class Application {
 			user.setBirthDate(getMyBirthday());
 			user.setCreatedBy("Brais");
 			user.setCreatedDate(date);
-			user.setEmailAddress("brais@email.com");
-			user.setFirstName("Brais");
-			user.setLastName("Cidras");
+			user.setEmailAddress("samira@email.com");
+			user.setFirstName("Samira");
+			user.setLastName("Nasr");
 			user.setLastUpdatedBy("Brais");
 			user.setLastUpdatedDate(date);
 			
@@ -75,12 +75,17 @@ public class Application {
 //			user.setAddress(addresses);
 			
 			Credential credential = new Credential();
-			credential.setPassword("ASIOAF@");
-			credential.setUsername("ASIOAF");
+			credential.setPassword("CMON@");
+			credential.setUsername("CMON");
+			
 			credential.setUser(user);
+			user.setCredential(credential);
 			
 			session.save(credential);
 			session.getTransaction().commit();
+			
+			User dbUser = (User) session.get(User.class, credential.getUser().getUserId());
+			System.out.println(dbUser.getFirstName());
 //			
 //			session.refresh(user);
 //			
