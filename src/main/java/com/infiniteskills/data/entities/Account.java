@@ -11,7 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -24,8 +23,7 @@ public class Account {
 	@Column(name = "ACCOUNT_ID")
 	private Long accountId;
 	
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name="ACCOUNT_ID", nullable=false)
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="account")
 	private List<Transaction> transactions = new ArrayList<Transaction>();
 	
 	@Column(name = "NAME")

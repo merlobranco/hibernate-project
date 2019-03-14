@@ -22,13 +22,16 @@ public class Application {
 			org.hibernate.Transaction transaction = session.beginTransaction();
 			
 			Account account = createNewAccount();
-			account.getTransactions().add(createNewBeltPurchase());
-			account.getTransactions().add(createShoePurchase());
+			account.getTransactions().add(createNewBeltPurchase(account));
+			account.getTransactions().add(createShoePurchase(account));
 			session.save(account);
 			
 			session.save(account);
 			
 			transaction.commit();
+			
+			Transaction dbTransaction = (Transaction)session.get(Transaction.class, account.getTransactions().get(0).getTransactionId());
+			System.out.println(dbTransaction.getAccount().getName());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -38,8 +41,9 @@ public class Application {
 		}
 	}
 	
-	private static Transaction createNewBeltPurchase() {
+	private static Transaction createNewBeltPurchase(Account account) {
 		Transaction beltPurchase = new Transaction();
+		beltPurchase.setAccount(account);
 		beltPurchase.setTitle("Dress Belt");
 		beltPurchase.setAmount(new BigDecimal("50.00"));
 		beltPurchase.setClosingBalance(new BigDecimal("0.00"));
@@ -53,8 +57,9 @@ public class Application {
 		return beltPurchase;
 	}
 
-	private static Transaction createShoePurchase() {
+	private static Transaction createShoePurchase(Account account) {
 		Transaction shoePurchase = new Transaction();
+		shoePurchase.setAccount(account);
 		shoePurchase.setTitle("Work Shoes");
 		shoePurchase.setAmount(new BigDecimal("100.00"));
 		shoePurchase.setClosingBalance(new BigDecimal("0.00"));
