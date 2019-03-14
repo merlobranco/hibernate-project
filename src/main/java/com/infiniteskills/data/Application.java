@@ -6,6 +6,7 @@ import java.util.Date;
 import org.hibernate.Session;
 
 import com.infiniteskills.data.entities.Account;
+import com.infiniteskills.data.entities.Budget;
 import com.infiniteskills.data.entities.Transaction;
 
 /**
@@ -22,16 +23,17 @@ public class Application {
 			org.hibernate.Transaction transaction = session.beginTransaction();
 			
 			Account account = createNewAccount();
-			account.getTransactions().add(createNewBeltPurchase(account));
-			account.getTransactions().add(createShoePurchase(account));
-			session.save(account);
+
+			Budget budget = new Budget();
+			budget.setGoalAmount(new BigDecimal("10000.00"));
+			budget.setName("Emergency Fund");
+			budget.setPeriod("Yearly");
 			
-			session.save(account);
+			budget.getTransactions().add(createNewBeltPurchase(account));
+			budget.getTransactions().add(createShoePurchase(account));
 			
+			session.save(budget);
 			transaction.commit();
-			
-			Transaction dbTransaction = (Transaction)session.get(Transaction.class, account.getTransactions().get(0).getTransactionId());
-			System.out.println(dbTransaction.getAccount().getName());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
