@@ -48,7 +48,7 @@ public class User {
 	@CollectionTable(name="USER_ADDRESS", joinColumns=@JoinColumn(name="USER_ID"))
 	@AttributeOverrides({@AttributeOverride(name="addressLine1", column=@Column(name="USER_ADDRESS_LINE_1")),
 						@AttributeOverride(name="addressLine2", column=@Column(name="USER_ADDRESS_LINE_2"))})
-	private List<Address> address = new ArrayList<Address>();
+	private List<Address> addresses = new ArrayList<Address>();
 	
 	@Column(name="LAST_UPDATED_DATE")
 	private Date lastUpdatedDate;
@@ -116,12 +116,12 @@ public class User {
 		this.emailAddress = emailAddress;
 	}
 
-	public List<Address> getAddress() {
-		return address;
+	public List<Address> getAddresses() {
+		return addresses;
 	}
 
-	public void setAddress(List<Address> address) {
-		this.address = address;
+	public void setAddresses(List<Address> addresses) {
+		this.addresses = addresses;
 	}
 
 	public Date getLastUpdatedDate() {

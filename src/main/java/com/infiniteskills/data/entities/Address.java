@@ -20,6 +20,9 @@ public class Address {
 	
 	@Column(name = "ZIP_CODE")
 	private String zipCode;
+	
+	@Column(name = "ADDRESS_TYPE")
+	private String addressType;
 
 	public String getAddressLine1() {
 		return addressLine1;
@@ -59,6 +62,14 @@ public class Address {
 
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
+	}
+
+	public String getAddressType() {
+		return addressType;
+	}
+
+	public void setAddressType(String addressType) {
+		this.addressType = addressType;
 	}
 
 	public Address() {
