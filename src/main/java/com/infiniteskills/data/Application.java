@@ -1,17 +1,12 @@
 package com.infiniteskills.data;
 
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import org.hibernate.Session;
 
-import com.infiniteskills.data.entities.Address;
-import com.infiniteskills.data.entities.Bank;
-import com.infiniteskills.data.entities.Credential;
-import com.infiniteskills.data.entities.TimeTest;
-import com.infiniteskills.data.entities.User;
+import com.infiniteskills.data.entities.Account;
+import com.infiniteskills.data.entities.Transaction;
 
 /**
  * Class created for testing purposes
@@ -21,99 +16,69 @@ import com.infiniteskills.data.entities.User;
 public class Application {
 	
 	public static void main(String[] args) {
-		Session session = HibernateUtil.getSessionfactory().openSession();
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		
 		try {
-			session.getTransaction().begin();
+			org.hibernate.Transaction transaction = session.beginTransaction();
 			
-//			Bank bank = new Bank();
-//			bank.setName("Federal Trust");
-//			bank.setAddressLine1("33 Wall Street");
-//			bank.setAddressLine2("Suite 233");
-//			bank.setCity("New York");
-//			bank.setState("NY");
-//			bank.setZipCode("12345");
-//			bank.setInternational(false);
-//			bank.setCreatedBy("Kevin");
-//			bank.setCreatedDate(new Date());
-//			bank.setLastUpdatedBy("Kevin");
-//			bank.setLastUpdatedDate(new Date());
-//			bank.getContacts().put("MANAGER", "Joe");
-//			bank.getContacts().put("TELLER", "Mary");
-//			
-//			session.save(bank);
-//			
-//			session.getTransaction().commit();
+			Account account = createNewAccount();
+			account.getTransactions().add(createNewBeltPurchase());
+			account.getTransactions().add(createShoePurchase());
+			session.save(account);
 			
-			Date date = new Date();
-			User user = new User();
-			user.setBirthDate(getMyBirthday());
-			user.setCreatedBy("Brais");
-			user.setCreatedDate(date);
-			user.setEmailAddress("samira@email.com");
-			user.setFirstName("Samira");
-			user.setLastName("Nasr");
-			user.setLastUpdatedBy("Brais");
-			user.setLastUpdatedDate(date);
+			session.save(account);
 			
-//			List<Address> addresses = new ArrayList<Address>(); 
-//			Address address = new Address();
-//			address.setAddressLine1("Blood");
-//			address.setAddressLine2("Rage");
-//			address.setCity("Madrid");
-//			address.setState("MA");
-//			address.setZipCode("28000");
-//			addresses.add(address);
-//			
-//			Address address2 = new Address();
-//			address2.setAddressLine1("Game");
-//			address2.setAddressLine2("Thrones");
-//			address2.setCity("Cape Town");
-//			address2.setState("CT");
-//			address2.setZipCode("7925");
-//			addresses.add(address2);
-//			
-//			user.setAddress(addresses);
+			transaction.commit();
 			
-			Credential credential = new Credential();
-			credential.setPassword("CMON@");
-			credential.setUsername("CMON");
-			
-			credential.setUser(user);
-			user.setCredential(credential);
-			
-			session.save(credential);
-			session.getTransaction().commit();
-			
-			User dbUser = (User) session.get(User.class, credential.getUser().getUserId());
-			System.out.println(dbUser.getFirstName());
-//			
-//			session.refresh(user);
-//			
-//			System.out.println(user.getAge());
-			
-//			TimeTest test = new TimeTest(new Date());
-//			session.save(test);
-//			session.getTransaction().commit();
-//			
-//			// For getting the timeTest ID
-//			session.refresh(test);
-//			
-//			System.out.println(test.toString());
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		finally {
+		}finally{
 			session.close();
-			HibernateUtil.getSessionfactory().close();
+			HibernateUtil.getSessionFactory().close();
 		}
 	}
 	
-	private static Date getMyBirthday() {
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, 1981);
-		calendar.set(Calendar.MONTH, 11);
-		calendar.set(Calendar.DATE, 27);
-		return calendar.getTime();
+	private static Transaction createNewBeltPurchase() {
+		Transaction beltPurchase = new Transaction();
+		beltPurchase.setTitle("Dress Belt");
+		beltPurchase.setAmount(new BigDecimal("50.00"));
+		beltPurchase.setClosingBalance(new BigDecimal("0.00"));
+		beltPurchase.setCreatedBy("Kevin Bowersox");
+		beltPurchase.setCreatedDate(new Date());
+		beltPurchase.setInitialBalance(new BigDecimal("0.00"));
+		beltPurchase.setLastUpdatedBy("Kevin Bowersox");
+		beltPurchase.setLastUpdatedDate(new Date());
+		beltPurchase.setNotes("New Dress Belt");
+		beltPurchase.setTransactionType("Debit");
+		return beltPurchase;
+	}
+
+	private static Transaction createShoePurchase() {
+		Transaction shoePurchase = new Transaction();
+		shoePurchase.setTitle("Work Shoes");
+		shoePurchase.setAmount(new BigDecimal("100.00"));
+		shoePurchase.setClosingBalance(new BigDecimal("0.00"));
+		shoePurchase.setCreatedBy("Kevin Bowersox");
+		shoePurchase.setCreatedDate(new Date());
+		shoePurchase.setInitialBalance(new BigDecimal("0.00"));
+		shoePurchase.setLastUpdatedBy("Kevin Bowersox");
+		shoePurchase.setLastUpdatedDate(new Date());
+		shoePurchase.setNotes("Nice Pair of Shoes");
+		shoePurchase.setTransactionType("Debit");
+		return shoePurchase;
+	}
+	
+	private static Account createNewAccount() {
+		Account account = new Account();
+		account.setCloseDate(new Date());
+		account.setOpenDate(new Date());
+		account.setCreatedBy("Kevin Bowersox");
+		account.setInitialBalance(new BigDecimal("50.00"));
+		account.setName("Savings Account");
+		account.setCurrentBalance(new BigDecimal("100.00"));
+		account.setLastUpdatedBy("Kevin Bowersox");
+		account.setLastUpdatedDate(new Date());
+		account.setCreatedDate(new Date());
+		return account;
 	}
 }

@@ -11,7 +11,7 @@ public class HibernateUtil {
 	private static StandardServiceRegistry registry;
 	private static final SessionFactory sessionFactory = buildSessionFactory();
 
-	public static SessionFactory getSessionfactory() {
+	public static SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
 	

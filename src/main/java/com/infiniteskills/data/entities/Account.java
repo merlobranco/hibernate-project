@@ -1,13 +1,18 @@
 package com.infiniteskills.data.entities;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -15,9 +20,13 @@ import javax.persistence.Table;
 public class Account {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ACCOUNT_ID")
 	private Long accountId;
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="ACCOUNT_ID", nullable=false)
+	private List<Transaction> transactions = new ArrayList<Transaction>();
 	
 	@Column(name = "NAME")
 	private String name;
@@ -60,6 +69,14 @@ public class Account {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
 	}
 
 	public BigDecimal getInitialBalance() {
