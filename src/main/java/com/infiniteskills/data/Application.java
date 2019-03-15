@@ -20,34 +20,31 @@ import com.infiniteskills.data.entities.User;
 public class Application {
 
 	public static void main(String[] args) {
+		// Creating the persistence context
 		Session session = HibernateUtil.getSessionFactory().openSession();
+		
+		// Creating a Transient entity
+		Account account = createNewAccount();
+		Transaction trans1 = createNewBeltPurchase(account);
+		Transaction trans2 = createShoePurchase(account);
+		account.getTransactions().add(trans1);
+		account.getTransactions().add(trans2);
+		
+		// The 3 objects are not in the persistence context
+		System.out.println(session.contains(account));
+		System.out.println(session.contains(trans1));
+		System.out.println(session.contains(trans2));
 		
 		try {
 			org.hibernate.Transaction transaction = session.beginTransaction();
+			session.save(account);
 			
-			Account account = createNewAccount();
-			Account account2 = createNewAccount();
-			User user = createUser();
-			User user2 = createUser();
-			
-			account.getUsers().add(user);
-			account.getUsers().add(user2);
-			user.getAccounts().add(account);
-			user2.getAccounts().add(account);
-			
-			account2.getUsers().add(user);
-			account2.getUsers().add(user2);
-			user.getAccounts().add(account2);
-			user2.getAccounts().add(account2);
-			
-			session.save(user);
-			session.save(user2);
-			
+			// The 3 objects are in the persistence context
+			System.out.println(session.contains(account));
+			System.out.println(session.contains(trans1));
+			System.out.println(session.contains(trans1));
+
 			transaction.commit();
-			
-			User dbUser = (User) session.get(User.class, user.getUserId());
-			System.out.println(dbUser.getAccounts().iterator().next().getName());
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
