@@ -26,7 +26,7 @@ public class Application {
 		try {
 			org.hibernate.Transaction transaction = session.beginTransaction();
 			
-			Bank bank = (Bank)session.get(Bank.class, 1L);
+			Bank bank = (Bank)session.load(Bank.class, 1L);
 			System.out.println("Method Executed");
 			
 			System.out.println(bank.getName());
