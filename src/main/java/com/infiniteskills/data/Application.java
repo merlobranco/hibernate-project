@@ -26,11 +26,14 @@ public class Application {
 		try {
 			org.hibernate.Transaction transaction = session.beginTransaction();
 			
-			Bank bank = (Bank)session.load(Bank.class, 1L);
-			System.out.println("Method Executed");
+			Bank bank = (Bank)session.get(Bank.class, 1L);
 			
-			System.out.println(bank.getName());
+			bank.setName("New Hope Bank");
+			bank.setLastUpdatedBy("Brais Cidras");
+			bank.setLastUpdatedDate(new Date());
+			
 			transaction.commit();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
