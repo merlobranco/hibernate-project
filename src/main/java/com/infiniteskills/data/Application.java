@@ -27,10 +27,11 @@ public class Application {
 			org.hibernate.Transaction transaction = session.beginTransaction();
 			
 			Bank bank = (Bank)session.get(Bank.class, 1L);
+			System.out.println(session.contains(bank));
 			
-			bank.setName("New Hope Bank");
-			bank.setLastUpdatedBy("Brais Cidras");
-			bank.setLastUpdatedDate(new Date());
+			session.delete(bank);
+			System.out.println("Method Invoked");
+			System.out.println(session.contains(bank));
 			
 			transaction.commit();
 			
