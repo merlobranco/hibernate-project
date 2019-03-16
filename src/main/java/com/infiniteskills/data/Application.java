@@ -24,28 +24,28 @@ import com.infiniteskills.data.entities.User;
 public class Application {
 
 	public static void main(String[] args) {
-		// Like the Hibernate Session factory
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("infinite-finances");
-		// Like the Hibernate Session. Persistence context
-		EntityManager em = factory.createEntityManager();
-		// Like the Hibernate transaction
-		EntityTransaction tx = em.getTransaction();
-
-		tx.begin();
+		EntityManagerFactory emf = null; 
+		EntityManager em = null; 
+		EntityTransaction tx = null;
 		
-		// Behaving like Hibernate get()
-		Bank bank = em.find(Bank.class, 1L);
-		System.out.println(em.contains(bank));
-		System.out.println(bank.getName());
-		
-		// Behaving like Hibernate load()
-		Bank bank2 = em.getReference(Bank.class, 1L);
-		System.out.println(em.contains(bank2));
-		System.out.println(bank2.getName());
-		
-		tx.commit();
-		em.close();
-		factory.close();
+		try {
+			emf = Persistence.createEntityManagerFactory("infinite-finances");
+			em = emf.createEntityManager();
+			tx = em.getTransaction();
+			tx.begin();
+			
+			Bank bank = em.find(Bank.class, 1L);
+			bank.setName("Another Demonstration");
+			
+			tx.commit();
+		}
+		catch(Exception e) {
+			tx.rollback();
+		}
+		finally {
+			em.close();
+			emf.close();
+		}
 	}
 	
 	private static Bank createBank() {
