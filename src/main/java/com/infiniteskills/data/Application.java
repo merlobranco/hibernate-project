@@ -4,7 +4,10 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 
-import org.hibernate.Session;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 
 import com.infiniteskills.data.entities.Account;
 import com.infiniteskills.data.entities.Address;
@@ -21,28 +24,21 @@ import com.infiniteskills.data.entities.User;
 public class Application {
 
 	public static void main(String[] args) {
-		// Creating a persistence context
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		org.hibernate.Transaction transaction = session.beginTransaction();
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("infinite-finances");
+		EntityManager em = emf.createEntityManager();
 		
-		try {
-			Bank bank = (Bank)session.get(Bank.class, 1L);
-			bank.setName("Something Different");
-			System.out.println("Calling Flush");
-			// To force our persistence context to be synchronized with the underlying database
-			session.flush();
-			
-			bank.setAddressLine1("Another Address Line");
-			System.out.println("Calling commit");
-			transaction.commit();
-		} catch (Exception e) {
-			transaction.rollback();
-			e.printStackTrace();
-		}finally{
-			// Closing the persistence context
-			session.close();
-			HibernateUtil.getSessionFactory().close();
-		}
+		EntityTransaction tx =  em.getTransaction();
+
+		tx.begin();
+		
+		Bank bank = createBank();
+		
+		em.persist(bank);
+		
+		tx.commit();
+		
+		em.close();
+		emf.close();
 	}
 	
 	private static Bank createBank() {
