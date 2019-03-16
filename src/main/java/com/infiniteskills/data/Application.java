@@ -35,9 +35,19 @@ public class Application {
 			tx.begin();
 			
 			Bank bank = em.find(Bank.class, 1L);
+			// All the entities in the persistence context become detached
+			//em.clear();
+			// The provided entity become detached from the persistence context
+			em.detach(bank);
 			System.out.println(em.contains(bank));
-			em.remove(bank);
-			System.out.println(em.contains(bank));
+			
+			bank.setName("Something else");
+			// Re-attaching the detached entity
+			// Looks for the entity in the persistence context, if it doesn't find it, looks for it again in the database
+			Bank bank2 = em.merge(bank);
+			
+			// This change won't be set on the database because bank is still detached, we should work with bank2 instead
+			bank.setName("Something else 2");
 			
 			tx.commit();
 		}
