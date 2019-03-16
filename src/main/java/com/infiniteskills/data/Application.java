@@ -21,24 +21,35 @@ import com.infiniteskills.data.entities.User;
 public class Application {
 
 	public static void main(String[] args) {
-		Session session = HibernateUtil.getSessionFactory().openSession();
-		
 		try {
+			// Creating a persistence context
+			Session session = HibernateUtil.getSessionFactory().openSession();
 			org.hibernate.Transaction transaction = session.beginTransaction();
 			
 			Bank bank = (Bank)session.get(Bank.class, 1L);
-			System.out.println(session.contains(bank));
-			
-			session.delete(bank);
-			System.out.println("Method Invoked");
-			System.out.println(session.contains(bank));
-			
 			transaction.commit();
+			// Closing the persistence context
+			// At this point our bank entity is detached
+			session.close();
+			
+			Session session2 = HibernateUtil.getSessionFactory().openSession();
+			org.hibernate.Transaction transaction2 = session2.beginTransaction();
+			
+			System.out.println(session2.contains(bank));
+			// Re-attaching our bank entity to our second persistence context 
+			// An update statement is subsequently fired to the database to ensure that if the entity were dirty,
+			// meaning it has a different state or some of the fields have been changed, the database is synced with new state.
+			session2.update(bank);
+			bank.setName("Test Bank");
+			System.out.println("Method Invoked");
+			System.out.println(session2.contains(bank));
+			
+			transaction2.commit();
+			session2.close();			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
-			session.close();
 			HibernateUtil.getSessionFactory().close();
 		}
 	}
