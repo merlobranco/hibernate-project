@@ -21,32 +21,26 @@ import com.infiniteskills.data.entities.User;
 public class Application {
 
 	public static void main(String[] args) {
+		// Creating a persistence context
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		org.hibernate.Transaction transaction = session.beginTransaction();
+		
 		try {
-			// Creating a persistence context
-			Session session = HibernateUtil.getSessionFactory().openSession();
-			org.hibernate.Transaction transaction = session.beginTransaction();
-			Bank detachedBank = (Bank)session.get(Bank.class, 1L);
+			Bank bank = (Bank)session.get(Bank.class, 1L);
+			bank.setName("Something Different");
+			System.out.println("Calling Flush");
+			// To force our persistence context to be synchronized with the underlying database
+			session.flush();
+			
+			bank.setAddressLine1("Another Address Line");
+			System.out.println("Calling commit");
 			transaction.commit();
-			// Closing the persistence context, detaching the bank entity
-			session.close();
-			
-			// Creating a new bank entity
-			Bank transientBank = createBank();
-			
-			Session session2 = HibernateUtil.getSessionFactory().openSession();
-			org.hibernate.Transaction transaction2 = session2.beginTransaction();
-			
-			// Re-attaching the previous bank entity
-			session2.saveOrUpdate(detachedBank);
-			// Adding the new bank entity to the new persistence context
-			session2.saveOrUpdate(transientBank);
-			detachedBank.setName("Test Bank 2");
-			transaction2.commit();
-			session2.close();			
-			
 		} catch (Exception e) {
+			transaction.rollback();
 			e.printStackTrace();
 		}finally{
+			// Closing the persistence context
+			session.close();
 			HibernateUtil.getSessionFactory().close();
 		}
 	}
@@ -58,7 +52,7 @@ public class Application {
 		bank.setAddressLine2("Suite 332");
 		bank.setCity("New York");
 		bank.setCreatedBy("Kevin Bowersox");
-		bank.setCreatedDate(new Date());
+		bank.setCreatedDate (new Date());
 		bank.setInternational(false);
 		bank.setLastUpdatedBy("Kevin Bowersox");
 		bank.setLastUpdatedDate(new Date());
