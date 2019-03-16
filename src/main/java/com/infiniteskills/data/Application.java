@@ -9,12 +9,17 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
 import com.infiniteskills.data.entities.Account;
 import com.infiniteskills.data.entities.Address;
 import com.infiniteskills.data.entities.Bank;
 import com.infiniteskills.data.entities.Credential;
+import com.infiniteskills.data.entities.Currency;
 import com.infiniteskills.data.entities.Transaction;
 import com.infiniteskills.data.entities.User;
+import com.infiniteskills.data.entities.ids.CurrencyId;
 
 /**
  * Class created for testing purposes
@@ -24,39 +29,42 @@ import com.infiniteskills.data.entities.User;
 public class Application {
 
 	public static void main(String[] args) {
-		EntityManagerFactory emf = null; 
-		EntityManager em = null; 
-		EntityTransaction tx = null;
+
+		SessionFactory sessionFactory = null;
+		Session session = null;
+		Session session2 = null;
+		org.hibernate.Transaction tx = null;
+		org.hibernate.Transaction tx2 = null;
 		
 		try {
-			emf = Persistence.createEntityManagerFactory("infinite-finances");
-			em = emf.createEntityManager();
-			tx = em.getTransaction();
-			tx.begin();
+			sessionFactory = HibernateUtil.getSessionFactory();
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
 			
-			Bank bank = em.find(Bank.class, 1L);
-			// All the entities in the persistence context become detached
-			//em.clear();
-			// The provided entity become detached from the persistence context
-			em.detach(bank);
-			System.out.println(em.contains(bank));
+			Currency currency = new Currency();
+			currency.setCountryName("United States");
+			currency.setName("Dollar");
+			currency.setSymbol("$");
 			
-			bank.setName("Something else");
-			// Re-attaching the detached entity
-			// Looks for the entity in the persistence context, if it doesn't find it, looks for it again in the database
-			Bank bank2 = em.merge(bank);
-			
-			// This change won't be set on the database because bank is still detached, we should work with bank2 instead
-			bank.setName("Something else 2");
-			
+			session.persist(currency);
 			tx.commit();
+			
+			session2 = sessionFactory.openSession();
+			tx2 = session.beginTransaction();
+
+			Currency dbCurrency = (Currency) session2.get(Currency.class, new CurrencyId("Dollar", "United States"));
+			System.out.println(dbCurrency.getName());
+			
+			tx2.commit();
+			
 		}
 		catch(Exception e) {
 			tx.rollback();
 		}
 		finally {
-			em.close();
-			emf.close();
+			session.close();
+			session2.close();
+			sessionFactory.close();
 		}
 	}
 	
