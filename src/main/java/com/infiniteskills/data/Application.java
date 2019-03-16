@@ -4,11 +4,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -17,9 +12,9 @@ import com.infiniteskills.data.entities.Address;
 import com.infiniteskills.data.entities.Bank;
 import com.infiniteskills.data.entities.Credential;
 import com.infiniteskills.data.entities.Currency;
+import com.infiniteskills.data.entities.Market;
 import com.infiniteskills.data.entities.Transaction;
 import com.infiniteskills.data.entities.User;
-import com.infiniteskills.data.entities.ids.CurrencyId;
 
 /**
  * Class created for testing purposes
@@ -32,9 +27,7 @@ public class Application {
 
 		SessionFactory sessionFactory = null;
 		Session session = null;
-		Session session2 = null;
 		org.hibernate.Transaction tx = null;
-		org.hibernate.Transaction tx2 = null;
 		
 		try {
 			sessionFactory = HibernateUtil.getSessionFactory();
@@ -42,28 +35,25 @@ public class Application {
 			tx = session.beginTransaction();
 			
 			Currency currency = new Currency();
-			currency.setCountryName("United States");
-			currency.setName("Dollar");
-			currency.setSymbol("$");
+			currency.setCountryName("United Kingdom");
+			currency.setName("Pound");
+			currency.setSymbol("Pound Sign");
 			
-			session.persist(currency);
+			Market market = new Market();
+			market.setMarketName("London Stock Market");
+			market.setCurrency(currency);
+			
+			session.persist(market);
 			tx.commit();
 			
-			session2 = sessionFactory.openSession();
-			tx2 = session.beginTransaction();
-
-			Currency dbCurrency = (Currency) session2.get(Currency.class, new CurrencyId("Dollar", "United States"));
-			System.out.println(dbCurrency.getName());
-			
-			tx2.commit();
-			
+			Market dbMarket = (Market)session.get(Market.class, market.getMarketId());
+			System.out.println(dbMarket.getCurrency().getName());
 		}
 		catch(Exception e) {
 			tx.rollback();
 		}
 		finally {
 			session.close();
-			session2.close();
 			sessionFactory.close();
 		}
 	}
