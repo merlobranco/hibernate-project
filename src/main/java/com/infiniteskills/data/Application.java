@@ -25,25 +25,22 @@ public class Application {
 			// Creating a persistence context
 			Session session = HibernateUtil.getSessionFactory().openSession();
 			org.hibernate.Transaction transaction = session.beginTransaction();
-			
-			Bank bank = (Bank)session.get(Bank.class, 1L);
+			Bank detachedBank = (Bank)session.get(Bank.class, 1L);
 			transaction.commit();
-			// Closing the persistence context
-			// At this point our bank entity is detached
+			// Closing the persistence context, detaching the bank entity
 			session.close();
+			
+			// Creating a new bank entity
+			Bank transientBank = createBank();
 			
 			Session session2 = HibernateUtil.getSessionFactory().openSession();
 			org.hibernate.Transaction transaction2 = session2.beginTransaction();
 			
-			System.out.println(session2.contains(bank));
-			// Re-attaching our bank entity to our second persistence context 
-			// An update statement is subsequently fired to the database to ensure that if the entity were dirty,
-			// meaning it has a different state or some of the fields have been changed, the database is synced with new state.
-			session2.update(bank);
-			bank.setName("Test Bank");
-			System.out.println("Method Invoked");
-			System.out.println(session2.contains(bank));
-			
+			// Re-attaching the previous bank entity
+			session2.saveOrUpdate(detachedBank);
+			// Adding the new bank entity to the new persistence context
+			session2.saveOrUpdate(transientBank);
+			detachedBank.setName("Test Bank 2");
 			transaction2.commit();
 			session2.close();			
 			
@@ -52,6 +49,22 @@ public class Application {
 		}finally{
 			HibernateUtil.getSessionFactory().close();
 		}
+	}
+	
+	private static Bank createBank() {
+		Bank bank = new Bank();
+		bank.setName("First United Federal");
+		bank.setAddressLine1("103 Washington Plaza");
+		bank.setAddressLine2("Suite 332");
+		bank.setCity("New York");
+		bank.setCreatedBy("Kevin Bowersox");
+		bank.setCreatedDate(new Date());
+		bank.setInternational(false);
+		bank.setLastUpdatedBy("Kevin Bowersox");
+		bank.setLastUpdatedDate(new Date());
+		bank.setState("NY");
+		bank.setZipCode("10000");
+		return bank;
 	}
 
 	private static User createUser() {
