@@ -8,11 +8,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import com.infiniteskills.data.entities.Account;
+import com.infiniteskills.data.entities.AccountType;
 import com.infiniteskills.data.entities.Address;
 import com.infiniteskills.data.entities.Bank;
 import com.infiniteskills.data.entities.Credential;
-import com.infiniteskills.data.entities.Currency;
-import com.infiniteskills.data.entities.Market;
 import com.infiniteskills.data.entities.Transaction;
 import com.infiniteskills.data.entities.User;
 
@@ -34,20 +33,14 @@ public class Application {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
 			
-			Currency currency = new Currency();
-			currency.setCountryName("United Kingdom");
-			currency.setName("Pound");
-			currency.setSymbol("Pound Sign");
-			
-			Market market = new Market();
-			market.setMarketName("London Stock Market");
-			market.setCurrency(currency);
-			
-			session.persist(market);
+			Account account = createNewAccount();
+			account.setAccountType(AccountType.SAVINGS);
+			session.save(account);
 			tx.commit();
 			
-			Market dbMarket = (Market)session.get(Market.class, market.getMarketId());
-			System.out.println(dbMarket.getCurrency().getName());
+			Account dbAccount = (Account)session.get(Account.class, account.getAccountId());
+			System.out.println(dbAccount.getName());
+			System.out.println(dbAccount.getAccountType());
 		}
 		catch(Exception e) {
 			tx.rollback();
