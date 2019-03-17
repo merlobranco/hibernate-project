@@ -33,6 +33,8 @@ public class Account {
 		inverseJoinColumns=@JoinColumn(name="USER_ID"))
 	private Set<User> users = new HashSet<User>();
 	
+	private AccountType accountType;
+	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="account")
 	private List<Transaction> transactions = new ArrayList<Transaction>();
 	
@@ -78,13 +80,13 @@ public class Account {
 	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
-
-	public String getName() {
-		return name;
+	
+	public AccountType getAccountType() {
+		return accountType;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setAccountType(AccountType accountType) {
+		this.accountType = accountType;
 	}
 
 	public List<Transaction> getTransactions() {
@@ -93,6 +95,14 @@ public class Account {
 
 	public void setTransactions(List<Transaction> transactions) {
 		this.transactions = transactions;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public BigDecimal getInitialBalance() {
