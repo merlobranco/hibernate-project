@@ -46,11 +46,11 @@ public class Market {
 		this.marketName = marketName;
 	}
 
-	public final Currency getCurrency() {
+	public Currency getCurrency() {
 		return currency;
 	}
 
-	public final void setCurrency(Currency currency) {
+	public void setCurrency(Currency currency) {
 		this.currency = currency;
 	}
 
