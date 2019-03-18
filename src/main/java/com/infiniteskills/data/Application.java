@@ -7,13 +7,13 @@ import java.util.Date;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import com.infiniteskills.data.dao.UserHibernateDao;
+import com.infiniteskills.data.dao.interfaces.UserDao;
 import com.infiniteskills.data.entities.Account;
 import com.infiniteskills.data.entities.Address;
 import com.infiniteskills.data.entities.Bank;
 import com.infiniteskills.data.entities.Bond;
 import com.infiniteskills.data.entities.Credential;
-import com.infiniteskills.data.entities.Investment;
-import com.infiniteskills.data.entities.Portfolio;
 import com.infiniteskills.data.entities.Stock;
 import com.infiniteskills.data.entities.Transaction;
 import com.infiniteskills.data.entities.User;
@@ -25,8 +25,7 @@ import com.infiniteskills.data.entities.User;
  */
 public class Application {
 
-	public static void main(String[] args) {
-
+	public static void main(String[] args) {		
 		SessionFactory sessionFactory = null;
 		Session session = null;
 		org.hibernate.Transaction tx = null;
@@ -34,31 +33,17 @@ public class Application {
 		try {
 			sessionFactory = HibernateUtil.getSessionFactory();
 			session = sessionFactory.openSession();
-			tx = session.beginTransaction();
-		
-			Portfolio portfolio= new Portfolio();
-			portfolio.setName("First Investments");
-			
-		    Stock stock = createStock();		
-		    stock.setPortfolio(portfolio);
-		    
-		    Bond bond = createBond();
-		    bond.setPortfolio(portfolio);
-		
-			portfolio.getInvestements().add(stock);
-			portfolio.getInvestements().add(bond);
-			
-			session.save(stock);
-			session.save(bond);
 
+			UserDao dao = new UserHibernateDao();
+			dao.setSession(session);
+			
+			tx = session.beginTransaction();
+			
+			User user = createUser();
+			
+			dao.save(user);
+			
 			tx.commit();
-			
-			Portfolio dbPortfolio = (Portfolio) session.get(Portfolio.class, portfolio.getPortfolioId());
-			session.refresh(dbPortfolio);
-			
-			for(Investment i:dbPortfolio.getInvestements()){
-				System.out.println(i.getName());
-			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
