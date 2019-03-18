@@ -1,32 +1,23 @@
 package com.infiniteskills.data.entities;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "STOCK")
-public class Stock {
+public class Stock extends Investment {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "STOCK_ID")
 	private Long stockId;
 	
-	@Column(name = "NAME")
-	protected String name;
-
-	@Column(name = "ISSUER")
-	protected String issuer;
-
-	@Column(name = "PURCHASE_DATE")
-	protected Date purchaseDate;
-
 	@Column(name = "SHARE_PRICE")
 	private BigDecimal sharePrice;
 
@@ -39,30 +30,6 @@ public class Stock {
 
 	public void setStockId(Long stockId) {
 		this.stockId = stockId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getIssuer() {
-		return issuer;
-	}
-
-	public void setIssuer(String issuer) {
-		this.issuer = issuer;
-	}
-
-	public Date getPurchaseDate() {
-		return purchaseDate;
-	}
-
-	public void setPurchaseDate(Date purchaseDate) {
-		this.purchaseDate = purchaseDate;
 	}
 	
 	public BigDecimal getSharePrice() {

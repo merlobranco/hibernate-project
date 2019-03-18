@@ -8,10 +8,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import com.infiniteskills.data.entities.Account;
-import com.infiniteskills.data.entities.AccountType;
 import com.infiniteskills.data.entities.Address;
 import com.infiniteskills.data.entities.Bank;
+import com.infiniteskills.data.entities.Bond;
 import com.infiniteskills.data.entities.Credential;
+import com.infiniteskills.data.entities.Stock;
 import com.infiniteskills.data.entities.Transaction;
 import com.infiniteskills.data.entities.User;
 
@@ -27,28 +28,48 @@ public class Application {
 		SessionFactory sessionFactory = null;
 		Session session = null;
 		org.hibernate.Transaction tx = null;
-		
+
 		try {
 			sessionFactory = HibernateUtil.getSessionFactory();
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
+		
+			Stock stock = createStock();
+			session.save(stock);
+		
+			Bond bond = createBond();
+			session.save(bond);
 			
-			Account account = createNewAccount();
-			account.setAccountType(AccountType.SAVINGS);
-			session.save(account);
 			tx.commit();
-			
-			Account dbAccount = (Account)session.get(Account.class, account.getAccountId());
-			System.out.println(dbAccount.getName());
-			System.out.println(dbAccount.getAccountType());
-		}
-		catch(Exception e) {
+
+		} catch (Exception e) {
+			e.printStackTrace();
 			tx.rollback();
-		}
-		finally {
+		} finally {
 			session.close();
 			sessionFactory.close();
 		}
+	}
+
+	private static Bond createBond() {
+		Bond bond = new Bond();
+		bond.setInterestRate(new BigDecimal("123.22"));
+		bond.setIssuer("JP Morgan Chase");
+		bond.setMaturityDate(new Date());
+		bond.setPurchaseDate(new Date());
+		bond.setName("Long Term Bond Purchases");
+		bond.setValue(new BigDecimal("10.22"));
+		return bond;
+	}
+
+	private static Stock createStock(){
+		Stock stock = new Stock();
+		stock.setIssuer("Allen Edmonds");
+		stock.setName("Private American Stock Purchases");
+		stock.setPurchaseDate(new Date());
+		stock.setQuantity(new BigDecimal("1922"));
+		stock.setSharePrice(new BigDecimal("100.00"));
+		return stock;
 	}
 	
 	private static Bank createBank() {
@@ -56,9 +77,10 @@ public class Application {
 		bank.setName("First United Federal");
 		bank.setAddressLine1("103 Washington Plaza");
 		bank.setAddressLine2("Suite 332");
+		bank.setAddressType("PRIMARY");
 		bank.setCity("New York");
 		bank.setCreatedBy("Kevin Bowersox");
-		bank.setCreatedDate (new Date());
+		bank.setCreatedDate(new Date());
 		bank.setInternational(false);
 		bank.setLastUpdatedBy("Kevin Bowersox");
 		bank.setLastUpdatedDate(new Date());
@@ -70,7 +92,7 @@ public class Application {
 	private static User createUser() {
 		User user = new User();
 		Address address = createAddress();
-		user.setAddresses(Arrays.asList(new Address[]{createAddress()}));
+		user.setAddresses(Arrays.asList(new Address[] { createAddress() }));
 		user.setBirthDate(new Date());
 		user.setCreatedBy("Kevin Bowersox");
 		user.setCreatedDate(new Date());
@@ -147,5 +169,5 @@ public class Application {
 		account.setCreatedDate(new Date());
 		return account;
 	}
-	
+
 }
