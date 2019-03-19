@@ -6,13 +6,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import com.infiniteskills.data.entities.Transaction;
 
 public class JpqlApplication {
 
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		
 		EntityManagerFactory factory = null;
@@ -25,7 +24,7 @@ public class JpqlApplication {
 			tx = em.getTransaction();
 			tx.begin();
 			
-			Query query = em.createQuery("from Transaction t order by t.title");
+			TypedQuery<Transaction> query = em.createQuery("from Transaction t order by t.title", Transaction.class);
 			List<Transaction> transactions = query.getResultList();
 			
 			for(Transaction t:transactions){
