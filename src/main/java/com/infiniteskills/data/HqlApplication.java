@@ -10,6 +10,7 @@ import com.infiniteskills.data.entities.Account;
 
 public class HqlApplication {
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void main(String[] args) {
 		SessionFactory factory = null;
 		Session session = null;
@@ -21,8 +22,7 @@ public class HqlApplication {
 			tx = session.beginTransaction();
 			
 			// Using implicit form of the join
-			Query<Account> query = session.createQuery("select distinct t.account from Transaction t"
-					+ " where t.amount > 500 and lower(t.transactionType) = 'deposit'", Account.class);
+			Query query = session.getNamedQuery("Account.largeDeposits");
 			
 		
 			List<Account> accounts = query.list();

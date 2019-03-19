@@ -1,5 +1,6 @@
 package com.infiniteskills.data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -24,13 +25,10 @@ public class JpqlApplication {
 			tx = em.getTransaction();
 			tx.begin();
 			
-			Query query = em.createQuery("select distinct t.account.name,"
-					+ " concat(concat(t.account.bank.name, ' '),t.account.bank.address.state)"
-					+ " from Transaction t"
-					+ " where t.amount > 500 and t.transactionType = 'Deposit'");
+			Query query = em.createNamedQuery("Account.byWithdrawlAmount");
+			query.setParameter("amount", new BigDecimal(99));
 			
 			List<Object[]> accounts = query.getResultList();
-			
 			
 			// Retrieving the data through projection
 			for(Object[] a:accounts){
