@@ -22,7 +22,7 @@ public class HqlApplication {
 			
 			// Using implicit form of the join
 			Query<Account> query = session.createQuery("select distinct t.account from Transaction t"
-					+ " where t.amount > 500 and t.transactionType = 'Deposit'", Account.class);
+					+ " where t.amount > 500 and lower(t.transactionType) = 'deposit'", Account.class);
 			
 		
 			List<Account> accounts = query.list();
