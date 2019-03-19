@@ -34,9 +34,8 @@ public class Application {
 			session = sessionFactory.openSession();
 			tx = session.beginTransaction();
 
-			UserCredentialView view = (UserCredentialView) session.get(UserCredentialView.class, 1L);
-			System.out.println(view.getFirstName());
-			System.out.println(view.getLastName());
+			Bank bank = createBank();
+			session.save(bank);
 			
 			tx.commit();
 
