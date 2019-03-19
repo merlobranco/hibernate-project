@@ -10,13 +10,12 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
-import com.infiniteskills.data.entities.Transaction;
+import com.infiniteskills.data.entities.Account;
 
 public class JpqlApplication {
 
 	public static void main(String[] args) {
 		
-		Scanner scanner = new Scanner(System.in);
 		EntityManagerFactory factory = null;
 		EntityManager em = null;
 		EntityTransaction tx = null;
@@ -27,19 +26,15 @@ public class JpqlApplication {
 			tx = em.getTransaction();
 			tx.begin();
 			
-			TypedQuery<Transaction> query = em.createQuery("from Transaction t"
-															+ " where (t.amount between ?1 and ?2) and t.title like '%s'"
-															+ " order by t.title", Transaction.class);
+			// Using implicit form of the join
+			TypedQuery<Account> query = em.createQuery("select distinct a from Transaction t"
+															+ " join t.account a"
+															+ " where t.amount > 500 and t.transactionType = 'Deposit'", Account.class);
 			
-			System.out.println("Please provide the first amount:");
-			query.setParameter(1, new BigDecimal(scanner.next()));
-			System.out.println("Please provide the second amount:");
-			query.setParameter(2, new BigDecimal(scanner.next()));
+			List<Account> accounts = query.getResultList();
 			
-			List<Transaction> transactions = query.getResultList();
-			
-			for(Transaction t:transactions){
-				System.out.println(t.getTitle());
+			for(Account a:accounts){
+				System.out.println(a.getName());
 			}
 			
 			tx.commit();
@@ -48,7 +43,6 @@ public class JpqlApplication {
 		}finally{
 			em.close();
 			factory.close();
-			scanner.close();
 		}
 	}
 }

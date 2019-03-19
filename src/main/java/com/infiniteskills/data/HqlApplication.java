@@ -1,19 +1,16 @@
 package com.infiniteskills.data;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Scanner;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
-import com.infiniteskills.data.entities.Transaction;
+import com.infiniteskills.data.entities.Account;
 
 public class HqlApplication {
 
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
 		SessionFactory factory = null;
 		Session session = null;
 		org.hibernate.Transaction tx = null;
@@ -23,17 +20,15 @@ public class HqlApplication {
 			session = factory.openSession();
 			tx = session.beginTransaction();
 			
-			Query<Transaction> query = session.createQuery("select t from Transaction t "
-															+ "where t.amount > :amount and t.transactionType = 'Withdrawl'", Transaction.class);
+			// Using implicit form of the join
+			Query<Account> query = session.createQuery("select distinct t.account from Transaction t"
+					+ " where t.amount > 500 and t.transactionType = 'Deposit'", Account.class);
 			
-			System.out.println("Please specify amount");
+		
+			List<Account> accounts = query.list();
 			
-			query.setParameter("amount", new BigDecimal(scanner.next()));
-			
-			List<Transaction> transactions = query.list();
-			
-			for(Transaction t:transactions){
-				System.out.println(t.getTitle());
+			for(Account a:accounts){
+				System.out.println(a.getName());
 			}
 			
 			tx.commit();
@@ -42,7 +37,6 @@ public class HqlApplication {
 		}finally{
 			session.close();
 			factory.close();
-			scanner.close();
 		}
 	}
 }
