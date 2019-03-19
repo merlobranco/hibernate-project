@@ -7,8 +7,6 @@ import java.util.Date;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import com.infiniteskills.data.dao.UserHibernateDao;
-import com.infiniteskills.data.dao.interfaces.UserDao;
 import com.infiniteskills.data.entities.Account;
 import com.infiniteskills.data.entities.Address;
 import com.infiniteskills.data.entities.Bank;
@@ -17,6 +15,7 @@ import com.infiniteskills.data.entities.Credential;
 import com.infiniteskills.data.entities.Stock;
 import com.infiniteskills.data.entities.Transaction;
 import com.infiniteskills.data.entities.User;
+import com.infiniteskills.data.entities.UserCredentialView;
 
 /**
  * Class created for testing purposes
@@ -33,15 +32,11 @@ public class Application {
 		try {
 			sessionFactory = HibernateUtil.getSessionFactory();
 			session = sessionFactory.openSession();
-
-			UserDao dao = new UserHibernateDao();
-			dao.setSession(session);
-			
 			tx = session.beginTransaction();
-			
-			User user = createUser();
-			
-			dao.save(user);
+
+			UserCredentialView view = (UserCredentialView) session.get(UserCredentialView.class, 1L);
+			System.out.println(view.getFirstName());
+			System.out.println(view.getLastName());
 			
 			tx.commit();
 
