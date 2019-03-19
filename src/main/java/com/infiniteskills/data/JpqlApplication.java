@@ -1,6 +1,8 @@
 package com.infiniteskills.data;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -14,6 +16,7 @@ public class JpqlApplication {
 
 	public static void main(String[] args) {
 		
+		Scanner scanner = new Scanner(System.in);
 		EntityManagerFactory factory = null;
 		EntityManager em = null;
 		EntityTransaction tx = null;
@@ -25,8 +28,14 @@ public class JpqlApplication {
 			tx.begin();
 			
 			TypedQuery<Transaction> query = em.createQuery("from Transaction t"
-															+ " where (t.amount between 75 and 100) and t.title like '%s'"
+															+ " where (t.amount between ?1 and ?2) and t.title like '%s'"
 															+ " order by t.title", Transaction.class);
+			
+			System.out.println("Please provide the first amount:");
+			query.setParameter(1, new BigDecimal(scanner.next()));
+			System.out.println("Please provide the second amount:");
+			query.setParameter(2, new BigDecimal(scanner.next()));
+			
 			List<Transaction> transactions = query.getResultList();
 			
 			for(Transaction t:transactions){
@@ -39,6 +48,7 @@ public class JpqlApplication {
 		}finally{
 			em.close();
 			factory.close();
+			scanner.close();
 		}
 	}
 }
