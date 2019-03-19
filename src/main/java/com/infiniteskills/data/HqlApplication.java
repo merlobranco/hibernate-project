@@ -24,11 +24,11 @@ public class HqlApplication {
 			tx = session.beginTransaction();
 			
 			Query<Transaction> query = session.createQuery("select t from Transaction t "
-															+ "where t.amount > ? and t.transactionType = 'Withdrawl'", Transaction.class);
+															+ "where t.amount > :amount and t.transactionType = 'Withdrawl'", Transaction.class);
 			
 			System.out.println("Please specify amount");
 			
-			query.setParameter(0, new BigDecimal(scanner.next()));
+			query.setParameter("amount", new BigDecimal(scanner.next()));
 			
 			List<Transaction> transactions = query.list();
 			
