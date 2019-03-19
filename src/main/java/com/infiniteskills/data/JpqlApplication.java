@@ -26,7 +26,7 @@ public class JpqlApplication {
 			tx = em.getTransaction();
 			tx.begin();
 			
-			// Using implicit form of the join
+			// Using exlicit form of the join
 			TypedQuery<Account> query = em.createQuery("select distinct a from Transaction t"
 															+ " join t.account a"
 															+ " where t.amount > 500 and t.transactionType = 'Deposit'", Account.class);
