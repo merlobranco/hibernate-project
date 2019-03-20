@@ -1,9 +1,11 @@
 package com.infiniteskills.data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
@@ -27,8 +29,16 @@ public class HibernateApplication {
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<Transaction> criteria = builder.createQuery(Transaction.class);
 			Root<Transaction> root = criteria.from(Transaction.class);
+			
+			Path<BigDecimal> amountPath = root.get("amount");
+			Path<String> transactionTypePath = root.get("transactionType");
+			
 			// Adding select and order by clause
-			criteria.select(root).orderBy(builder.desc(root.get("title")));
+			criteria.select(root)
+					// Adding where clause
+					.where(builder.and(builder.le(amountPath, new BigDecimal("20.00")),builder.equal(transactionTypePath, "Withdrawl")))
+					// Adding order by clause
+					.orderBy(builder.desc(root.get("title")));
 			
 			List<Transaction> transactions = session.createQuery(criteria).getResultList();
 
@@ -37,7 +47,7 @@ public class HibernateApplication {
 			}
 
 			tx.commit();
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			tx.rollback();
