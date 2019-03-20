@@ -1,6 +1,5 @@
 package com.infiniteskills.data;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,7 +9,6 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import com.infiniteskills.data.entities.Transaction;
@@ -23,6 +21,9 @@ public class JpaApplication {
 		EntityManager em = null;
 		EntityTransaction tx = null;
 
+		int pageNumber = 1;
+		int pageSize = 5;
+
 		try {
 			factory = Persistence.createEntityManagerFactory("infinite-finances");
 			em = factory.createEntityManager();
@@ -34,14 +35,12 @@ public class JpaApplication {
 					.createQuery(Transaction.class);
 
 			Root<Transaction> root = criteriaQuery.from(Transaction.class);
-			Path<BigDecimal> amountPath = root.get("amount");
-			Path<String> transactionTypePath = root.get("transactionType");
+			criteriaQuery.select(root);
 
-			criteriaQuery.select(root).where(
-					cb.and(cb.le(amountPath, new BigDecimal("20.00")),
-							cb.equal(transactionTypePath, "Withdrawl")));
-			
 			TypedQuery<Transaction> query = em.createQuery(criteriaQuery);
+			query.setFirstResult((pageNumber - 1) * pageSize);
+			query.setMaxResults(pageSize);
+
 			List<Transaction> transactions = query.getResultList();
 
 			for (Transaction t : transactions) {
